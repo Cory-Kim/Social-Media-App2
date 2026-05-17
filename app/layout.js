@@ -1,14 +1,12 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google"; 
 import "./globals.css";
+import StyledComponentsRegistry from "../lib/AntRegistry";
+import { ClerkProvider } from "@clerk/nextjs";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// This is the "module scope"! Next.js requires the font loader to sit right here.
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter", 
 });
 
 export const metadata = {
@@ -18,8 +16,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        {/* Notice the lowercase "inter" inside the backticks template literal */}
+        <body className={`${inter.variable} antialiased`}>
+          <StyledComponentsRegistry>
+            {children}
+          </StyledComponentsRegistry>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
